@@ -1,53 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>JFFT - Jackal Furious FingerTyping</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>JFFT Typing Test - Login</title>
+  <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
   <header class="topbar">
     <div class="container topbar-inner">
       <div class="brand">
-        <img src="images/logo.png" alt="JFFT Logo" class="logo" onerror="this.style.display='none'">
+        <img src="images/logo.png" alt="logo" class="logo" />
         <span class="brand-title">JFFT</span>
       </div>
-      <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="practice.html">Practice</a>
-        <a href="dashboard.html">Dashboard</a>
-      </nav>
     </div>
   </header>
 
-  <main class="container hero">
-    <div class="hero-card">
-      <div class="hero-left">
-        <h1>Jackal Furious FingerTyping</h1>
-        <p class="lead">Train your speed and accuracy. Real-time feedback, clean dashboard, and certificates.</p>
+  <main class="container center-box">
+    <div class="card auth-card">
+      <h2>Welcome to JFFT Typing Test</h2>
+      <p class="muted">Register or log in to track your performance.</p>
 
-        <label class="label">Enter your name</label>
-        <input id="nameInput" class="input" placeholder="Your name (e.g. Neema)" />
-        <div class="row">
-          <button class="btn primary" onclick="startFromLanding()">Start Practice</button>
-          <button class="btn outline" onclick="goToDashboard()">View Dashboard</button>
-        </div>
+      <input type="text" id="username" class="input" placeholder="Enter username" />
+      <input type="password" id="password" class="input" placeholder="Enter password" />
 
-        <p class="small-grey">We store your scores locally in this browser (localStorage). No account required.</p>
-      </div>
-
-      <div class="hero-right">
-        <img src="images/hero.jpg" alt="hero" class="hero-image" onerror="this.style.display='none'">
+      <div class="row">
+        <button class="btn primary" onclick="registerUser()">Register</button>
+        <button class="btn" onclick="loginUser()">Login</button>
       </div>
     </div>
   </main>
 
   <footer class="footer">
-    <div class="container">© <span id="year"></span> Jackal Tech Ltd — JFFT Web App</div>
+    <div class="container">© 2025 JFFT Web App</div>
   </footer>
 
   <script src="script.js"></script>
-  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

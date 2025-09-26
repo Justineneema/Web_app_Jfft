@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Typing Test - JFFT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <img src="images/logo.png" alt="logo" class="logo" />
+        <span class="brand-title">JFFT</span>
+      </div>
+      <nav class="nav">
+        <a href="test.html" class="active">Typing Test</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="index.html" onclick="logoutUser()">Logout</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <h2>Typing Test</h2>
+    <p class="muted">Logged in as <span id="currentUser"></span></p>
+
+    <div class="test-box">
+      <div class="words" id="words"></div>
+      <input type="text" id="inputBox" class="input-box" placeholder="Start typing..." autofocus />
+
+      <div class="status-bar">
+        <span>⏱ Time: <span id="timer">60</span>s</span>
+        <span>⚡ WPM: <span id="wpm">0</span></span>
+        <span>✅ Accuracy: <span id="accuracy">100</span>%</span>
+      </div>
+    </div>
+
+    <div class="results hidden" id="results">
+      <h2>Results</h2>
+      <p><strong>WPM:</strong> <span id="finalWPM"></span></p>
+      <p><strong>Accuracy:</strong> <span id="finalAccuracy"></span>%</p>
+      <p><strong>Errors:</strong> <span id="finalErrors"></span></p>
+      <button onclick="saveResult()" class="btn primary">Save Result</button>
+      <button onclick="restartTest()" class="btn">Try Again</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
