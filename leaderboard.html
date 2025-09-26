@@ -1,37 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Leaderboard - JFFT</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="topbar">
-    <div class="container topbar-inner">
-      <div class="brand">
-        <img src="images/logo.png" alt="logo" class="logo" />
-        <span class="brand-title">JFFT</span>
-      </div>
-      <nav class="nav">
-        <a href="test.html">Typing Test</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="leaderboard.html" class="active">Leaderboard</a>
-        <a href="index.html" onclick="logoutUser()">Logout</a>
-      </nav>
-    </div>
+    <img src="images/logo.png" class="nav-logo" alt="logo">
+    <nav>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="practice.html">Practice</a>
+      <a href="leaderboard.html" class="active">Leaderboard</a>
+      <a href="#" onclick="logoutUser()">Logout</a>
+    </nav>
   </header>
 
   <main class="container">
-    <h2>Leaderboard</h2>
-    <table class="results-table" id="leaderboardTable">
+    <h1>Leaderboard</h1>
+    <img src="images/performance.png" alt="Performance" class="perf-img">
+    <table class="table">
       <thead>
-        <tr><th>User</th><th>Best WPM</th><th>Accuracy</th></tr>
+        <tr>
+          <th>Rank</th><th>User</th><th>WPM</th><th>Accuracy</th>
+        </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        <tr><td>1</td><td>Alice</td><td>120</td><td>98%</td></tr>
+        <tr><td>2</td><td>Bob</td><td>100</td><td>95%</td></tr>
+        <tr><td>3</td><td>You</td><td>90</td><td>93%</td></tr>
+      </tbody>
     </table>
   </main>
 
   <script src="script.js"></script>
+  <script>
+    if (!localStorage.getItem("currentUser")) {
+      window.location.href = "index.html";
+    }
+  </script>
 </body>
 </html>

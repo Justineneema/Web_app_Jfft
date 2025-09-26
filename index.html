@@ -1,41 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>JFFT Typing Test - Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JFFT - Login</title>
   <link rel="stylesheet" href="style.css">
-
 </head>
-<body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <div class="brand">
-        <img src="images/logo.png" alt="logo" class="logo" />
-        <span class="brand-title">JFFT</span>
-      </div>
+<body class="auth-body">
+  <div class="auth-card">
+    <img src="images/logo.png" alt="logo" class="auth-logo">
+    <h2>Welcome to JFFT Typing Test</h2>
+    <input type="text" id="username" class="input" placeholder="Username">
+    <input type="password" id="password" class="input" placeholder="Password">
+    <div class="row">
+      <button class="btn primary" onclick="registerUser()">Register</button>
+      <button class="btn" onclick="loginUser()">Login</button>
     </div>
-  </header>
-
-  <main class="container center-box">
-    <div class="card auth-card">
-      <h2>Welcome to JFFT Typing Test</h2>
-      <p class="muted">Register or log in to track your performance.</p>
-
-      <input type="text" id="username" class="input" placeholder="Enter username" />
-      <input type="password" id="password" class="input" placeholder="Enter password" />
-
-      <div class="row">
-        <button class="btn primary" onclick="registerUser()">Register</button>
-        <button class="btn" onclick="loginUser()">Login</button>
-      </div>
-    </div>
-  </main>
-
-  <footer class="footer">
-    <div class="container">© 2025 JFFT Web App</div>
-  </footer>
+  </div>
 
   <script src="script.js"></script>
+  <script>
+    if (localStorage.getItem("currentUser")) {
+      window.location.href = "dashboard.html";
+    }
+  </script>
 </body>
 </html>

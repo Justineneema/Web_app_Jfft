@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Dashboard - JFFT</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="topbar">
-    <div class="container topbar-inner">
-      <div class="brand">
-        <img src="images/logo.png" alt="logo" class="logo" />
-        <span class="brand-title">JFFT</span>
-      </div>
-      <nav class="nav">
-        <a href="test.html">Typing Test</a>
-        <a href="dashboard.html" class="active">Dashboard</a>
-        <a href="leaderboard.html">Leaderboard</a>
-        <a href="index.html" onclick="logoutUser()">Logout</a>
-      </nav>
-    </div>
+    <img src="images/logo.png" class="nav-logo" alt="logo">
+    <nav>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="practice.html">Practice</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="#" onclick="logoutUser()">Logout</a>
+    </nav>
   </header>
 
   <main class="container">
-    <h2>Your Performance</h2>
-    <table class="results-table" id="resultsTable">
+    <h1>Assignments</h1>
+    <table class="table">
       <thead>
-        <tr><th>Date</th><th>WPM</th><th>Accuracy</th><th>Errors</th></tr>
+        <tr>
+          <th>Class</th><th>Teacher</th><th>Goal</th><th>Text</th>
+          <th>Due Date</th><th>Completion</th><th>Performance</th>
+        </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        <tr>
+          <td>Grade 9</td><td>You</td><td>50</td><td>Lorem Ipsum</td>
+          <td>Tomorrow</td><td>20%</td><td class="pass">PASS</td>
+        </tr>
+        <tr>
+          <td>Grade 13</td><td>You</td><td>80</td><td>Lorem Ipsum</td>
+          <td>Yesterday</td><td>100%</td><td class="fail">FAIL</td>
+        </tr>
+      </tbody>
     </table>
   </main>
 
   <script src="script.js"></script>
+  <script>
+    if (!localStorage.getItem("currentUser")) {
+      window.location.href = "index.html";
+    }
+  </script>
 </body>
 </html>
