@@ -2,43 +2,169 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Practice - JFFT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice - JFFT Typing Test</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="topbar">
-    <img src="images/logo.png" class="nav-logo" alt="logo">
-    <nav>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="practice.html" class="active">Practice</a>
-      <a href="leaderboard.html">Leaderboard</a>
-      <a href="#" onclick="logoutUser()">Logout</a>
+  <header class="navbar">
+    <div class="nav-brand">
+      <img src="images/JackalTechLogo_svg -dark.png" class="nav-logo" alt="JFFT Logo">
+      <span class="nav-title">JFFT</span>
+    </div>
+    <nav class="nav-menu">
+      <a href="dashboard.html" class="nav-link">Dashboard</a>
+      <a href="practice.html" class="nav-link active">Practice</a>
+      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+      <div class="user-menu">
+        <span class="user-name" id="currentUserName">User</span>
+        <button class="btn-logout" onclick="logoutUser()">Logout</button>
+      </div>
     </nav>
   </header>
 
-  <main class="container">
-    <h1>Typing Practice</h1>
-    <div class="test-box">
-      <div class="words" id="words"></div>
-      <input type="text" id="inputBox" class="input-box" placeholder="Start typing...">
-      <div class="status-bar">
-        <span>⏱ Time: <span id="timer">60</span>s</span>
-        <span>⚡ WPM: <span id="wpm">0</span></span>
-        <span>✅ Accuracy: <span id="accuracy">100</span>%</span>
+  <main class="practice-container">
+    <div class="practice-header">
+      <h1>Typing Practice</h1>
+      <p>Improve your typing speed and accuracy</p>
+    </div>
+
+    <div class="test-settings">
+      <div class="settings-group">
+        <label>Test Duration:</label>
+        <div class="setting-options">
+          <button class="setting-btn active" data-time="60">1 min</button>
+          <button class="setting-btn" data-time="120">2 min</button>
+          <button class="setting-btn" data-time="300">5 min</button>
+        </div>
+      </div>
+      
+      <div class="settings-group">
+        <label>Text Type:</label>
+        <div class="setting-options">
+          <button class="setting-btn active" data-text="common">Common Words</button>
+          <button class="setting-btn" data-text="quotes">Quotes</button>
+          <button class="setting-btn" data-text="code">Code</button>
+        </div>
+      </div>
+      
+      <div class="settings-group">
+        <label>Difficulty:</label>
+        <div class="setting-options">
+          <button class="setting-btn active" data-difficulty="easy">Easy</button>
+          <button class="setting-btn" data-difficulty="medium">Medium</button>
+          <button class="setting-btn" data-difficulty="hard">Hard</button>
+        </div>
       </div>
     </div>
-    <div class="keyboard-box">
+
+    <div class="typing-test">
+      <div class="test-display">
+        <div class="stats-bar">
+          <div class="stat-item">
+            <span class="stat-label">Time</span>
+            <span class="stat-value" id="timer">60</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">WPM</span>
+            <span class="stat-value" id="wpm">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Accuracy</span>
+            <span class="stat-value" id="accuracy">100%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Errors</span>
+            <span class="stat-value" id="errors">0</span>
+          </div>
+        </div>
+        
+        <div class="text-display" id="textDisplay">
+          <div class="words-container" id="wordsContainer">
+            <!-- Words will be dynamically loaded here -->
+          </div>
+        </div>
+        
+        <textarea 
+          id="inputArea" 
+          class="input-area" 
+          placeholder="Click here and start typing..."
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="test-controls">
+      <button class="control-btn" id="startBtn" onclick="startTest()">Start Test</button>
+      <button class="control-btn secondary" id="resetBtn" onclick="resetTest()">Reset</button>
+      <button class="control-btn secondary" id="pauseBtn" onclick="togglePause()" style="display: none;">Pause</button>
+    </div>
+
+    <div class="result-modal" id="resultModal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Test Complete!</h2>
+          <button class="close-btn" onclick="closeResults()">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="result-stats">
+            <div class="result-stat">
+              <div class="result-number" id="finalWPM">0</div>
+              <div class="result-label">WPM</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-number" id="finalAccuracy">0%</div>
+              <div class="result-label">Accuracy</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-number" id="finalErrors">0</div>
+              <div class="result-label">Errors</div>
+            </div>
+            <div class="result-stat">
+              <div class="result-number" id="finalCharacters">0</div>
+              <div class="result-label">Characters</div>
+            </div>
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-primary" onclick="startNewTest()">Try Again</button>
+            <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">Dashboard</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="keyboard-reference">
       <h3>Keyboard Layout</h3>
-      <img src="images/keyboard.png" alt="Keyboard Layout" class="keyboard-img">
+      <div class="keyboard-container">
+        <img src="images/Keyboard.png" alt="Keyboard Layout" class="keyboard-img">
+      </div>
+      <div class="typing-tips">
+        <h4>Typing Tips</h4>
+        <ul>
+          <li>Keep your wrists straight and fingers curved</li>
+          <li>Use all ten fingers - don't rely on just a few</li>
+          <li>Look at the screen, not your keyboard</li>
+          <li>Practice regularly to build muscle memory</li>
+          <li>Focus on accuracy first, speed will follow</li>
+        </ul>
+      </div>
     </div>
   </main>
 
   <script src="script.js"></script>
   <script>
-    if (!localStorage.getItem("currentUser")) {
+    if (!localStorage.getItem("currentUser") && !localStorage.getItem("demoMode")) {
       window.location.href = "index.html";
     }
+    
+    // Initialize practice page
+    initializePractice();
   </script>
 </body>
 </html>

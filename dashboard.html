@@ -2,48 +2,134 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Dashboard - JFFT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - JFFT Typing Test</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="topbar">
-    <img src="images/logo.png" class="nav-logo" alt="logo">
-    <nav>
-      <a href="dashboard.html" class="active">Dashboard</a>
-      <a href="practice.html">Practice</a>
-      <a href="leaderboard.html">Leaderboard</a>
-      <a href="#" onclick="logoutUser()">Logout</a>
+  <header class="navbar">
+    <div class="nav-brand">
+      <img src="images/JackalTechLogo_svg -dark.png" class="nav-logo" alt="JFFT Logo">
+      <span class="nav-title">JACKAL TECK</span>
+    </div>
+    <nav class="nav-menu">
+      <a href="dashboard.html" class="nav-link active">Dashboard</a>
+      <a href="practice.html" class="nav-link">Practice</a>
+      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
+      <div class="user-menu">
+        <span class="user-name" id="currentUserName">User</span>
+        <button class="btn-logout" onclick="logoutUser()">Logout</button>
+      </div>
     </nav>
   </header>
 
-  <main class="container">
-    <h1>Assignments</h1>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Class</th><th>Teacher</th><th>Goal</th><th>Text</th>
-          <th>Due Date</th><th>Completion</th><th>Performance</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Grade 9</td><td>You</td><td>50</td><td>Lorem Ipsum</td>
-          <td>Tomorrow</td><td>20%</td><td class="pass">PASS</td>
-        </tr>
-        <tr>
-          <td>Grade 13</td><td>You</td><td>80</td><td>Lorem Ipsum</td>
-          <td>Yesterday</td><td>100%</td><td class="fail">FAIL</td>
-        </tr>
-      </tbody>
-    </table>
+  <main class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>Welcome back!</h1>
+      <p>Track your typing progress and achieve your goals</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-info">
+          <h3 id="avgWPM">0</h3>
+          <p>Average WPM</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"></div>
+        <div class="stat-info">
+          <h3 id="avgAccuracy">0%</h3>
+          <p>Average Accuracy</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"></div>
+        <div class="stat-info">
+          <h3 id="testCount">0</h3>
+          <p>Tests Completed</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"></div>
+        <div class="stat-info">
+          <h3 id="bestWPM">0</h3>
+          <p>Best WPM</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-content">
+      <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-cards">
+          <div class="action-card" onclick="window.location.href='practice.html'">
+            <div class="action-icon">⚡</div>
+            <h3>Quick Test</h3>
+            <p>Start a 1-minute typing test</p>
+          </div>
+          <div class="action-card" onclick="window.location.href='practice.html?mode=custom'">
+            <div class="action-icon"></div>
+            <h3>Custom Test</h3>
+            <p>Choose your own settings</p>
+          </div>
+          <div class="action-card" onclick="window.location.href='leaderboard.html'">
+            <div class="action-icon"></div>
+            <h3>View Progress</h3>
+            <p>Check leaderboard & stats</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="recent-tests">
+        <h2>Recent Test Results</h2>
+        <div class="test-history" id="testHistory">
+          <div class="no-tests">
+            <p>No tests completed yet. <a href="practice.html">Start your first test!</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="achievements">
+        <h2>Achievements</h2>
+        <div class="achievement-grid" id="achievementGrid">
+          <div class="achievement locked">
+            <div class="achievement-icon"></div>
+            <h4>First Steps</h4>
+            <p>Complete your first test</p>
+          </div>
+          <div class="achievement locked">
+            <div class="achievement-icon">⚡</div>
+            <h4>Speed Demon</h4>
+            <p>Reach 50 WPM</p>
+          </div>
+          <div class="achievement locked">
+            <div class="achievement-icon"></div>
+            <h4>Perfectionist</h4>
+            <p>Achieve 100% accuracy</p>
+          </div>
+          <div class="achievement locked">
+            <div class="achievement-icon"></div>
+            <h4>Champion</h4>
+            <p>Reach 100 WPM</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 
   <script src="script.js"></script>
   <script>
-    if (!localStorage.getItem("currentUser")) {
+    if (!localStorage.getItem("currentUser") && !localStorage.getItem("demoMode")) {
       window.location.href = "index.html";
     }
+    
+    // Load user dashboard data
+    loadDashboardData();
   </script>
 </body>
 </html>
