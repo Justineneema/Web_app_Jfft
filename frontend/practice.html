@@ -24,11 +24,20 @@
         <button class="btn-logout" onclick="logoutUser()">Logout</button>
       </div>
     </nav>
+
+    <!-- Theme toggle placed in header (keeps your layout) -->
+    <div class="theme-toggle-header">
+      <label class="theme-switch">
+        <input type="checkbox" id="themeToggle" />
+        <span class="theme-slider"></span>
+      </label>
+      <span id="themeLabel" class="theme-label" aria-hidden="true">☀️</span>
+    </div>
   </header>
 
   <main class="practice-container">
     <div class="practice-header">
-      <h1>Typing Practice</h1>
+      <h1 style="color: #000;">Typing Practice</h1>
       <p>Improve your typing speed and accuracy</p>
     </div>
 
@@ -104,6 +113,10 @@
       <button class="control-btn" id="startBtn" onclick="startTest()">Start Test</button>
       <button class="control-btn secondary" id="resetBtn" onclick="resetTest()">Reset</button>
       <button class="control-btn secondary" id="pauseBtn" onclick="togglePause()" style="display: none;">Pause</button>
+
+      <!-- Voice typing button added (integrated with your JS) -->
+      <button class="control-btn voice-btn" id="voiceBtn" type="button">🎤 Start Voice Typing</button>
+      <span id="voiceStatus" class="voice-status">Voice: Off</span>
     </div>
 
     <div class="result-modal" id="resultModal" style="display: none;">
@@ -157,13 +170,24 @@
     </div>
   </main>
 
+  <footer>
+    <p>&copy; 2024 JFFT Typing Test. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
+  </footer>
+
   <script src="script.js"></script>
   <script>
+    // Protect the page (keeps your redirect logic)
     if (!localStorage.getItem("currentUser") && !localStorage.getItem("demoMode")) {
       window.location.href = "index.html";
     }
     
-    // Initialize practice page
+    // Initialize practice page (keeps your logic)
     initializePractice();
   </script>
 </body>

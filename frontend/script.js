@@ -917,6 +917,10 @@ if (document.readyState === 'loading') {
     } else if (window.location.pathname.includes('leaderboard.html')) {
       loadLeaderboardData();
     }
+
+    // Initialize new UI features for all pages after DOM ready
+    initializeThemeToggle && initializeThemeToggle();
+    initializeVoiceTyping && initializeVoiceTyping();
   });
 } else {
   if (window.location.pathname.includes('practice.html')) {
@@ -925,5 +929,136 @@ if (document.readyState === 'loading') {
     loadDashboardData();
   } else if (window.location.pathname.includes('leaderboard.html')) {
     loadLeaderboardData();
+  }
+
+  // Initialize new UI features for all pages
+  initializeThemeToggle && initializeThemeToggle();
+  initializeVoiceTyping && initializeVoiceTyping();
+}
+
+/* =========================================================
+   NEW: THEME (DARK / LIGHT) TOGGLE MODULE
+   - Uses #themeToggle input in header (added in practice.html)
+   - Persist setting to localStorage under 'jfft_theme'
+   ========================================================= */
+function initializeThemeToggle() {
+  try {
+    const toggle = document.getElementById('themeToggle');
+    const label = document.getElementById('themeLabel');
+    if (!toggle) return;
+
+    // load saved theme
+    const saved = localStorage.getItem('jfft_theme') || 'light';
+    document.body.classList.toggle('dark', saved === 'dark');
+    toggle.checked = saved === 'dark';
+    label.textContent = saved === 'dark' ? '🌙' : '☀️';
+
+    toggle.addEventListener('change', (e) => {
+      const isDark = e.target.checked;
+      document.body.classList.toggle('dark', isDark);
+      localStorage.setItem('jfft_theme', isDark ? 'dark' : 'light');
+      label.textContent = isDark ? '🌙' : '☀️';
+    });
+  } catch (e) {
+    console.warn('Theme toggle init failed', e);
+  }
+}
+
+/* =========================================================
+   NEW: VOICE TYPING MODULE
+   - Adds non-repeating speech-to-text that appends to #inputArea
+   - Uses finalTranscript + lastFinalLength to avoid repeats
+   - Integrates with your existing TypingTest input events (dispatch 'input')
+   ========================================================= */
+let _voiceRecognition = null;
+let _voiceListening = false;
+let _voiceFinal = '';
+let _voiceLastLen = 0;
+
+function initializeVoiceTyping() {
+  try {
+    const voiceBtn = document.getElementById('voiceBtn');
+    const voiceStatus = document.getElementById('voiceStatus');
+    const inputArea = document.getElementById('inputArea');
+    if (!voiceBtn || !inputArea) return;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    if (!SpeechRecognition) {
+      voiceBtn.disabled = true;
+      voiceStatus.textContent = 'Voice: Unsupported';
+      return;
+    }
+
+    _voiceRecognition = new SpeechRecognition();
+    _voiceRecognition.continuous = true;
+    _voiceRecognition.interimResults = true;
+    _voiceRecognition.lang = 'en-US';
+
+    _voiceRecognition.onstart = () => {
+      _voiceListening = true;
+      voiceBtn.textContent = '🛑 Stop Voice Typing';
+      voiceBtn.classList.add('active');
+      voiceStatus.textContent = 'Voice: Listening...';
+      // reset markers for this run
+      _voiceFinal = '';
+      _voiceLastLen = 0;
+    };
+
+    _voiceRecognition.onend = () => {
+      _voiceListening = false;
+      voiceBtn.textContent = '🎤 Start Voice Typing';
+      voiceBtn.classList.remove('active');
+      voiceStatus.textContent = 'Voice: Stopped';
+    };
+
+    _voiceRecognition.onerror = (e) => {
+      console.warn('Voice error', e);
+      voiceStatus.textContent = 'Voice: Error';
+    };
+
+    _voiceRecognition.onresult = (ev) => {
+      // Collect final and interim pieces; append only newly-finalized text
+      let interim = '';
+      for (let i = ev.resultIndex; i < ev.results.length; ++i) {
+        const res = ev.results[i];
+        if (res.isFinal) {
+          _voiceFinal += res[0].transcript;
+        } else {
+          interim += res[0].transcript;
+        }
+      }
+
+      // Append only the new final text (avoids repeats)
+      const newPart = _voiceFinal.slice(_voiceLastLen).trim();
+      if (newPart) {
+        // ensure spacing
+        const current = inputArea.value || '';
+        inputArea.value = (current + (current && !current.endsWith(' ') ? ' ' : '') + newPart).trim();
+
+        // update marker
+        _voiceLastLen = _voiceFinal.length;
+
+        // trigger your typing logic
+        inputArea.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    };
+
+    // Toggle on button click
+    voiceBtn.addEventListener('click', () => {
+      if (!_voiceListening) {
+        // start recognition
+        try {
+          _voiceFinal = '';
+          _voiceLastLen = 0;
+          _voiceRecognition.start();
+        } catch (err) {
+          console.warn('Recognition start failed', err);
+        }
+      } else {
+        _voiceRecognition.stop();
+      }
+    });
+  } catch (e) {
+    console.warn('Voice typing init failed', e);
   }
 }
