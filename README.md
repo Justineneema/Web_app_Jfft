@@ -7,7 +7,7 @@ It allows users to practice typing, measure performance, and track progress thro
 
 ## Features
 
-✅ **Typing Practice Module**  
+**Typing Practice Module**  
 - Real-time WPM, accuracy, and error tracking  
 - Adjustable test duration, text type, and difficulty  
 - Keyboard layout reference and typing tips  
