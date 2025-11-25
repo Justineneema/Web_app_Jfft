@@ -1,19 +1,18 @@
+// src/main.jsx - UPDATED VERSION
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
 
+// Import pages
 import Home from './pages/Home.jsx'
 import SignUp from './pages/SignUp.jsx'
 import SignIn from './pages/SignIn.jsx'
 import Typing from './pages/Typing.jsx'
 import Voice from './pages/Voice.jsx'
-import DashboardLayout from './layouts/DashboardLayout.jsx'
-import AssignmentsTable from './pages/app/AssignmentsTable.jsx'
-import AssignmentsCalendar from './pages/app/AssignmentsCalendar.jsx'
-import ClassesTable from './pages/app/ClassesTable.jsx'
-import StudentsTable from './pages/app/StudentsTable.jsx'
+import Leaderboard from './pages/Leaderboard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -25,23 +24,15 @@ const router = createBrowserRouter([
       { path: 'signin', element: <SignIn /> },
       { path: 'typing', element: <Typing /> },
       { path: 'voice', element: <Voice /> },
-    ],
-  },
-  {
-    path: '/app',
-    element: <DashboardLayout />,
-    children: [
-      { index: true, element: <AssignmentsTable /> },
-      { path: 'assignments', element: <AssignmentsTable /> },
-      { path: 'assignments/calendar', element: <AssignmentsCalendar /> },
-      { path: 'classes', element: <ClassesTable /> },
-      { path: 'students', element: <StudentsTable /> },
+      { path: 'leaderboard', element: <Leaderboard /> },
     ],
   },
 ])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 )
