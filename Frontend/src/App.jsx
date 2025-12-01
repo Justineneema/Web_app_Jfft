@@ -43,18 +43,26 @@ function App() {
             >
               Home
             </Link>
-            <a 
-              href="#features" 
-              className="text-neutral-400 hover:text-white transition-colors duration-200"
+            <Link 
+              to="/features" 
+              className={`transition-colors duration-200 ${
+                isActive('/features') 
+                  ? 'text-emerald-400 font-semibold border-b-2 border-emerald-400 pb-1' 
+                  : 'text-neutral-400 hover:text-white'
+              }`}
             >
               Features
-            </a>
-            <a 
-              href="#pricing" 
-              className="text-neutral-400 hover:text-white transition-colors duration-200"
+            </Link>
+            <Link 
+              to="/pricing" 
+              className={`transition-colors duration-200 ${
+                isActive('/pricing') 
+                  ? 'text-emerald-400 font-semibold border-b-2 border-emerald-400 pb-1' 
+                  : 'text-neutral-400 hover:text-white'
+              }`}
             >
               Pricing
-            </a>
+            </Link>
             <Link 
               to="/typing" 
               className={`transition-colors duration-200 ${
@@ -87,17 +95,11 @@ function App() {
             </Link>
           </div>
           
-          {/* Auth Buttons */}
-          <div className="flex items-center gap-4">
-            <Link 
-              to="/signin" 
-              className="text-neutral-300 hover:text-white transition-colors duration-200 text-sm hidden sm:block"
-            >
-              Sign In
-            </Link>
+          {/* Auth Button - Sign Up Only */}
+          <div className="flex items-center gap-3">
             <Link 
               to="/signup" 
-              className="btn-primary text-sm"
+              className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white rounded-lg transition-all duration-200 text-sm font-semibold hover:scale-105 transform shadow-lg hover:shadow-xl"
             >
               Sign Up
             </Link>

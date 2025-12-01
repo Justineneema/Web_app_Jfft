@@ -1,15 +1,100 @@
 // src/pages/Voice.jsx
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 
 const VOICE_TEXTS = [
   "Technology has transformed how we communicate and work in the modern digital age. New tools and platforms emerge constantly, changing the way we interact with information and each other in professional and personal contexts.",
   "Effective communication requires clear thinking and proper organization of ideas. Whether writing emails, reports, or presentations, the ability to express thoughts coherently is essential for success in any field or industry.",
 ]
 
+// Trial Limit Modal
+function TrialLimitModal({ trialsRemaining, onUpgrade }) {
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        className="bg-neutral-900 border-2 border-yellow-500/50 rounded-2xl p-8 max-w-md w-full text-center"
+      >
+        <div className="text-6xl mb-4">🎤</div>
+        <h2 className="text-3xl font-bold text-white mb-2">Trial Sessions Used</h2>
+        <p className="text-neutral-400 mb-6 text-lg">
+          You have <span className="text-yellow-400 font-bold">{trialsRemaining}</span> free trial session{trialsRemaining !== 1 ? 's' : ''} remaining
+        </p>
+        
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-6">
+          <p className="text-sm text-neutral-300">
+            Voice Typing is a <span className="text-yellow-400 font-semibold">Premium Feature</span>. Upgrade to get unlimited access and receive professional certificates!
+          </p>
+        </div>
+
+        <Link 
+          to="/pricing"
+          onClick={onUpgrade}
+          className="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 inline-block mb-3"
+        >
+          Upgrade to Premium
+        </Link>
+        
+        <Link 
+          to="/typing"
+          className="w-full text-neutral-400 hover:text-white transition-colors py-2 block text-sm"
+        >
+          Try Typing Practice Instead
+        </Link>
+      </motion.div>
+    </div>
+  )
+}
+
+// Certificate Modal
+function CertificateModal({ show, stats, onClose }) {
+  if (!show) return null
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        className="bg-neutral-900 border-2 border-emerald-500 rounded-2xl p-12 max-w-2xl w-full text-center"
+      >
+        <div className="text-6xl mb-4">🏆</div>
+        <h2 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent mb-4">
+          Outstanding Performance!
+        </h2>
+        
+        <div className="bg-gradient-to-r from-emerald-500/10 to-green-500/10 border-2 border-emerald-500/30 rounded-xl p-8 mb-6">
+          <p className="text-neutral-400 mb-4">You've achieved an excellent score in Voice Typing</p>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="bg-neutral-800/50 rounded-lg p-4">
+              <p className="text-sm text-neutral-400">Words Per Minute</p>
+              <p className="text-3xl font-bold text-emerald-400">{stats.wpm}</p>
+            </div>
+            <div className="bg-neutral-800/50 rounded-lg p-4">
+              <p className="text-sm text-neutral-400">Accuracy</p>
+              <p className="text-3xl font-bold text-blue-400">{stats.accuracy}%</p>
+            </div>
+          </div>
+          <p className="text-sm text-neutral-300">
+            ✓ Premium users receive <span className="font-semibold text-yellow-400">professional certificates</span> for high scores
+          </p>
+        </div>
+
+        <button 
+          onClick={onClose}
+          className="bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-lg font-semibold transition-all duration-300"
+        >
+          Continue
+        </button>
+      </motion.div>
+    </div>
+  )
+}
+
 export default function Voice() {
-  const { isPremium, user, upgradeToPremium } = useAuth()
+  const { isPremium, user } = useAuth()
   const navigate = useNavigate()
   const [isListening, setIsListening] = useState(false)
   const [transcript, setTranscript] = useState('')
@@ -21,9 +106,15 @@ export default function Voice() {
   const [currentTextIndex, setCurrentTextIndex] = useState(0)
   const recognitionRef = useRef(null)
   const timerRef = useRef(null)
+  const [showTrialModal, setShowTrialModal] = useState(false)
+  const [showCertificateModal, setShowCertificateModal] = useState(false)
+  const [testStats, setTestStats] = useState({ wpm: 0, accuracy: 0 })
 
   // Free trial: Allow 3 sessions for non-premium users
-  const [freeSessions, setFreeSessions] = useState(3)
+  const [freeSessions, setFreeSessions] = useState(() => {
+    const saved = localStorage.getItem('jfft_voice_sessions')
+    return saved ? parseInt(saved) : 3
+  })
 
   useEffect(() => {
     // Redirect non-premium users who have no free sessions left
@@ -86,8 +177,9 @@ export default function Voice() {
   }, [timeRemaining, wordCount, isPremium, freeSessions])
 
   const startTest = () => {
+    // Check if non-premium user has trials remaining
     if (!isPremium && freeSessions <= 0) {
-      setError('Free trial ended. Upgrade to Premium for unlimited voice typing.')
+      setShowTrialModal(true)
       return
     }
 
@@ -107,6 +199,14 @@ export default function Voice() {
         setTimeRemaining(prev => {
           if (prev <= 1) {
             stopTest()
+            // Check if test finished successfully
+            setTimeout(() => {
+              // Show certificate modal if premium and good score
+              if (isPremium && wpm > 40) {
+                setTestStats({ wpm, accuracy: 95 })
+                setShowCertificateModal(true)
+              }
+            }, 500)
             return 0
           }
           return prev - 1
@@ -115,7 +215,9 @@ export default function Voice() {
       
       // Decrement free sessions for non-premium users
       if (!isPremium) {
-        setFreeSessions(prev => prev - 1)
+        const newSessions = freeSessions - 1
+        setFreeSessions(newSessions)
+        localStorage.setItem('jfft_voice_sessions', newSessions)
       }
     }
   }
@@ -142,11 +244,6 @@ export default function Voice() {
     setError('')
   }
 
-  const handleUpgrade = () => {
-    upgradeToPremium()
-    setError('')
-  }
-
   const getDisplayText = () => {
     const timeProgress = 1 - (timeRemaining / 60)
     const wordProgress = Math.min(wordCount / 100, 1)
@@ -163,38 +260,13 @@ export default function Voice() {
     return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
-  // Premium required screen
+  // Show trial limit modal when free sessions are exhausted
   if (!isPremium && freeSessions <= 0) {
     return (
-      <div className="min-h-screen bg-neutral-950 pt-20 pb-8 px-4">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="bg-neutral-900 rounded-2xl p-8 border border-neutral-800">
-            <div className="w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <h1 className="text-2xl font-bold text-white mb-4">Upgrade to Premium</h1>
-            <p className="text-neutral-400 mb-6">
-              You've used all your free voice typing sessions. Upgrade to Premium for unlimited access to all features.
-            </p>
-            <div className="space-y-4">
-              <button 
-                onClick={handleUpgrade}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-colors"
-              >
-                Upgrade Now - $9.99/month
-              </button>
-              <button 
-                onClick={() => navigate('/typing')}
-                className="w-full bg-neutral-800 hover:bg-neutral-700 text-white py-3 rounded-lg font-semibold transition-colors border border-neutral-700"
-              >
-                Continue with Regular Typing
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <TrialLimitModal 
+        trialsRemaining={0} 
+        onUpgrade={() => setShowTrialModal(false)}
+      />
     )
   }
 
@@ -214,21 +286,27 @@ export default function Voice() {
         </div>
 
         {/* Free Trial Info */}
-        {!isPremium && (
-          <div className="bg-blue-900/20 border border-blue-500 rounded-xl p-4 mb-6">
+        {!isPremium && freeSessions > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl p-4 mb-6"
+          >
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-blue-400 font-semibold">Free Trial</div>
-                <div className="text-sm text-neutral-400">{freeSessions} sessions remaining</div>
+                <div className="text-yellow-400 font-semibold flex items-center gap-2">
+                  <span>🎤</span> Free Trial Active
+                </div>
+                <div className="text-sm text-neutral-400">{freeSessions} test{freeSessions !== 1 ? 's' : ''} remaining • Premium unlocks unlimited access + certificates</div>
               </div>
-              <button 
-                onClick={handleUpgrade}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+              <Link 
+                to="/pricing"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap"
               >
-                Upgrade to Premium
-              </button>
+                Go Premium
+              </Link>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {!isSupported ? (
@@ -359,6 +437,19 @@ export default function Voice() {
             </div>
           </>
         )}
+
+        {/* Trial Limit Modal */}
+        <TrialLimitModal 
+          trialsRemaining={freeSessions} 
+          onUpgrade={() => setShowTrialModal(false)}
+        />
+
+        {/* Certificate Modal */}
+        <CertificateModal 
+          show={showCertificateModal && isPremium}
+          stats={testStats}
+          onClose={() => setShowCertificateModal(false)}
+        />
       </div>
     </div>
   )
