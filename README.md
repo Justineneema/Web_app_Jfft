@@ -1,101 +1,161 @@
-#  JFFT Web App – Frontend
+#  JFFT - Jackal Furious Finger Typing
 
-The **Jackal Furious Finger Typing (JFFT)** web app is a modern, responsive typing platform built using **HTML, CSS, and JavaScript**.  
-It allows users to practice typing, measure performance, and track progress through a clean and minimal interface with both **light and dark modes**.
+
+## Overview
+
+JFFT is a typing practice platform with real-time metrics, voice typing, leaderboards, and performance tracking. Practice typing tests, track your progress, and compete with others.
 
 ---
 
-## Features
+##  Features
 
-**Typing Practice Module**  
-- Real-time WPM, accuracy, and error tracking  
-- Adjustable test duration, text type, and difficulty  
-- Keyboard layout reference and typing tips  
+- **Typing Tests** - Customizable duration, text types, and difficulty levels
+- **Voice Typing** - Practice using speech recognition
+- **Leaderboard** - Global rankings and performance tracking
+- **Achievements** - Unlock badges and milestones
+- **Dark/Light Mode** - Theme toggle with auto-save
+- **Premium Plans** - Free, Pro ($8/mo), and Team ($20/mo) subscriptions
+- **Responsive** - Works on desktop, tablet, and mobile
 
-**Voice-to-Text (Speech Recognition)**  
-- Practice typing using your voice  
-- Supports browsers with the Web Speech API  
+---
 
- **Leaderboard & Performance Tracking**  
-- Displays user performance and completion stats  
-- Tracks speed and accuracy improvements over time  
+##  Tech Stack
 
-**Achievements & Progress Analytics**  
-- Unlock achievements based on performance milestones  
-- View test summaries and progress insights  
-
-**Dark / Light Mode Toggle**  
-- Seamless switch between light and dark themes  
-- Preferences saved automatically  
-
- **Responsive Design**  
-- Fully optimized for desktop, tablet, and mobile devices  
+- **React 18** - UI framework
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Animations
+- **React Router** - Navigation
+- **Context API** - State management
 
 ---
 
 ##  Project Structure
 
-frontend/
-├── index.html
-├── dashboard.html
-├── practice.html
-├── leaderboard.html
-├── style.css
-├── script.js
-├── images/
-│ ├── Keyboard.png
-│ ├── JackalTechLogo_svg -dark.png
-│ └── ...
-└── README.md
-
-
----
-
-##  Technologies Used
-
-- **HTML** – Structure and layout  
-- **CSS** – Styling and responsiveness  
-- **JavaScript** – Functionality and logic  
-- **LocalStorage API** – Save progress and settings locally  
-- **Web Speech API** – Voice-to-text feature  
+```
+Frontend/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable components
+│   ├── pages/          # Page components
+│   ├── context/        # React Context
+│   ├── layouts/        # Layout components
+│   ├── assets/         # Images & media
+│   ├── App.jsx
+│   └── main.jsx
+├── package.json
+├── vite.config.js
+└── tailwind.config.js
+```
 
 ---
 
-## How to Run Locally
+##  Installation
 
-1. **Download or Clone this repository**
-   ```bash
-   git clone https://github.com/yourusername/Web_app_Jfft.git
+**Prerequisites:** Node.js 16+ and npm
 
-2. **Open the project folder**
+```bash
+# Clone repository
+git clone https://github.com/yourusername/Web_app_Jfft.git
+cd Web_app_Jfft/Frontend
 
-   ```cd Web_app_Jfft/frontend```
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+Open `http://localhost:5173` in your browser.
+
+---
+
+##  Quick Start
+
+1. Install dependencies: `npm install`
+2. Start dev server: `npm run dev`
+3. Create an account on the signup page
+4. Start a typing test and practice
+
+**Routes:**
+- `/` - Home
+- `/signup` - Sign up
+- `/signin` - Sign in
+- `/typing` - Typing practice
+- `/voice` - Voice typing
+- `/pricing` - Subscription plans
+- `/leaderboard` - Rankings
+
+---
+
+##  How to Use
+
+1. **Start Test** - Choose duration, text type, and difficulty
+2. **Type** - Real-time WPM, accuracy, and errors display
+3. **View Results** - Check metrics and compare with previous tests
+4. **Voice Mode** - Click voice button to practice with speech
+5. **Check Leaderboard** - View rankings and performance trends
+
+---
+
+##  Environment Variables
+
+Create `.env.local` in the Frontend directory:
+
+```env
+VITE_API_URL=http://localhost:3000
+VITE_STRIPE_PUBLIC_KEY=your_key
+VITE_GOOGLE_CLIENT_ID=your_id
+```
+
+---
+
+##  Available Scripts
+
+```bash
+npm run dev       # Start development server
+npm run build     # Build for production
+npm run preview   # Preview production build
+npm run lint      # Check code quality
+```
+
+---
+
+##  Payment Methods
+
+**Supported:** Card, PayPal, Google Play, Apple Pay, Stripe, MTN Momo Pay
+
+**Plans:**
+- Free - Basic lessons
+- Pro ($8/mo) - Unlimited access + voice typing
+- Team ($20/mo) - Manage up to 50 users + analytics
+
+---
+
+##  Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -m 'Add feature'`
+4. Push branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+---
+
+##  License
+
+MIT License - See [LICENSE](LICENSE) file for details
+
+---
+
+##  Support
+
+- Report issues on [GitHub Issues](../../issues)
+- Email: support@jfft.com
+
+---
 
 
-3. **Run the app**
+**Made with ❤️ by the JFFT Team**
 
-Open index.html directly in your browser or
-
-Use VS Code Live Server Extension for a smoother experience
-
-4.  **How to Use**
-
-1 Open the Practice page.
-2 Choose your test duration, text type, and difficulty.
-3 Click Start Test and begin typing.
-4 You can also click the Voice Typing button to practice using speech input.
-5 View your WPM, accuracy, and errors in real-time.
-6 After completion, your results will appear along with the leaderboard and progress insights.
-7 Switch between Dark and Light Mode using the toggle in the navigation bar.
-
-5. **Upcoming Improvements**
-
-UI enhancement for smoother navigation and modern visuals
-
-Additional voice-based commands and feedback
-
-Enhanced performance analytics and gamified interactions
-
-6. **License**
-
-This project is open-source and available for educational and non-commercial use.
+ Star us on GitHub if you find this project helpful!
